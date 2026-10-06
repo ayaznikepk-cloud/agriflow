@@ -192,6 +192,54 @@ export type Database = {
         }
         Relationships: []
       }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          crop_cycle_id: string
+          description: string | null
+          expense_date: string
+          farm_id: string
+          id: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          crop_cycle_id: string
+          description?: string | null
+          expense_date?: string
+          farm_id: string
+          id?: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          crop_cycle_id?: string
+          description?: string | null
+          expense_date?: string
+          farm_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_crop_cycle_id_fkey"
+            columns: ["crop_cycle_id"]
+            isOneToOne: false
+            referencedRelation: "crop_cycles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_farm_id_fkey"
+            columns: ["farm_id"]
+            isOneToOne: false
+            referencedRelation: "farms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       farms: {
         Row: {
           area_unit: string
@@ -268,6 +316,57 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "fields_farm_id_fkey"
+            columns: ["farm_id"]
+            isOneToOne: false
+            referencedRelation: "farms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      harvests: {
+        Row: {
+          created_at: string
+          crop_cycle_id: string
+          farm_id: string
+          grade: string | null
+          harvest_date: string
+          id: string
+          notes: string | null
+          quantity: number
+          unit: string
+        }
+        Insert: {
+          created_at?: string
+          crop_cycle_id: string
+          farm_id: string
+          grade?: string | null
+          harvest_date: string
+          id?: string
+          notes?: string | null
+          quantity: number
+          unit: string
+        }
+        Update: {
+          created_at?: string
+          crop_cycle_id?: string
+          farm_id?: string
+          grade?: string | null
+          harvest_date?: string
+          id?: string
+          notes?: string | null
+          quantity?: number
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "harvests_crop_cycle_id_fkey"
+            columns: ["crop_cycle_id"]
+            isOneToOne: false
+            referencedRelation: "crop_cycles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "harvests_farm_id_fkey"
             columns: ["farm_id"]
             isOneToOne: false
             referencedRelation: "farms"
