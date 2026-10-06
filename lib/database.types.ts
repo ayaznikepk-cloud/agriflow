@@ -65,6 +65,41 @@ export type Database = {
           },
         ]
       }
+      buyers: {
+        Row: {
+          created_at: string
+          farm_id: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          farm_id: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          farm_id?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "buyers_farm_id_fkey"
+            columns: ["farm_id"]
+            isOneToOne: false
+            referencedRelation: "farms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crop_cycles: {
         Row: {
           actual_harvest_date: string | null
@@ -367,6 +402,73 @@ export type Database = {
           },
           {
             foreignKeyName: "harvests_farm_id_fkey"
+            columns: ["farm_id"]
+            isOneToOne: false
+            referencedRelation: "farms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales: {
+        Row: {
+          buyer_id: string | null
+          created_at: string
+          crop_cycle_id: string
+          farm_id: string
+          id: string
+          notes: string | null
+          payment_status: string
+          quantity: number
+          rate_per_unit: number
+          sale_date: string
+          total_amount: number | null
+          unit: string
+        }
+        Insert: {
+          buyer_id?: string | null
+          created_at?: string
+          crop_cycle_id: string
+          farm_id: string
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          quantity: number
+          rate_per_unit: number
+          sale_date?: string
+          total_amount?: number | null
+          unit: string
+        }
+        Update: {
+          buyer_id?: string | null
+          created_at?: string
+          crop_cycle_id?: string
+          farm_id?: string
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          quantity?: number
+          rate_per_unit?: number
+          sale_date?: string
+          total_amount?: number | null
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_buyer_id_fkey"
+            columns: ["buyer_id"]
+            isOneToOne: false
+            referencedRelation: "buyers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_crop_cycle_id_fkey"
+            columns: ["crop_cycle_id"]
+            isOneToOne: false
+            referencedRelation: "crop_cycles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_farm_id_fkey"
             columns: ["farm_id"]
             isOneToOne: false
             referencedRelation: "farms"
