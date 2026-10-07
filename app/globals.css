@@ -119,3 +119,14 @@
  .section-form .full-field{grid-column:auto}
  .lifecycle-form button{width:100%}
 }
+
+/* Guided crop-cycle lifecycle */
+.lifecycle-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.lifecycle-actions form{margin:0}.lifecycle-actions button,.button-link{min-height:42px}
+.button-link{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:9px;background:var(--green);color:#fff;text-decoration:none;font-weight:800}
+.danger-zone{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.danger-zone>summary{cursor:pointer;color:var(--muted);font-size:13px}
+.danger-actions{margin-top:12px}
+@media(max-width:760px){
+ .lifecycle-actions,.lifecycle-actions form,.lifecycle-actions button,.lifecycle-actions .button-link{width:100%}
+}
