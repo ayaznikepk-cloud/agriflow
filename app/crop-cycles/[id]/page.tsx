@@ -58,14 +58,14 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
           <div><dt>Actual harvest</dt><dd>{c.actual_harvest_date || "—"}</dd></div>
           <div><dt>Harvest output lines</dt><dd>{harvests?.length || 0}</dd></div>
         </dl></article>
-        <article className="panel"><h2>Status</h2>
-          <form action={updateCycleStatus} className="form">
+        <article className="panel"><h2>Lifecycle</h2><p className="muted">Move this crop cycle to the next stage as field work progresses.</p>
+          <form action={updateCycleStatus} className="form lifecycle-form">
             <input type="hidden" name="id" value={c.id} />
-            <label>Crop cycle status<select name="status" defaultValue={c.status}>
+            <label>Status<select name="status" defaultValue={c.status}>
               <option value="planned">Planned</option><option value="active">Growing</option><option value="harvesting">Harvesting</option><option value="harvest_complete">Harvest complete</option><option value="closed">Closed</option><option value="cancelled">Cancelled</option>
             </select></label>
             <label>Actual harvest date<input type="date" name="actual_harvest_date" defaultValue={c.actual_harvest_date || ""} /></label>
-            <button>Update status</button>
+            <button>Save lifecycle</button>
           </form>
         </article>
       </section>
@@ -74,14 +74,14 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
     {tab === "activities" && <Section title="Activities">
       <details className="record-details"><summary>+ Add activity</summary><form action={addActivity} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
         <label>Activity<select name="activity_type"><option value="irrigation">Irrigation</option><option value="fertilizer">Fertilizer</option><option value="pesticide">Pesticide</option><option value="weeding">Weeding</option><option value="spraying">Spraying</option><option value="sowing">Sowing</option><option value="harvesting">Harvesting</option><option value="other">Other</option></select></label>
-        <label>Date<input type="date" name="activity_date" required/></label><label>Description<input name="description"/></label><button>Add activity</button>
+        <label>Date<input type="date" name="activity_date" required/></label><label className="full-field">Notes / description<textarea name="description" rows={3} placeholder="Work done, inputs used, observations…"/></label><button>Add activity</button>
       </form></details>
       <List empty="No activities recorded yet." rows={(activities || []).map(a => ({ a: a.activity_type, b: a.activity_date, c: a.description || "No notes" }))}/>
     </Section>}
 
     {tab === "tasks" && <Section title="Tasks">
       <details className="record-details"><summary>+ Add task</summary><form action={addTask} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
-        <label>Task<input name="title" required/></label><label>Due date<input type="date" name="due_date"/></label><label>Priority<select name="priority"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label><button>Add task</button>
+        <label>Task<input name="title" required/></label><label>Due date<input type="date" name="due_date"/></label><label>Priority<select name="priority"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label><label className="full-field">Notes<textarea name="notes" rows={3} placeholder="Instructions or additional details…"/></label><button>Add task</button>
       </form></details>
       <div className="history">{(tasks || []).map(t => <div className="history-item" key={t.id}><div><strong>{t.title}</strong><span>{t.due_date || "No due date"} · {t.priority}</span></div><form action={updateTask} className="task-status"><input type="hidden" name="task_id" value={t.id}/><input type="hidden" name="crop_cycle_id" value={c.id}/><select name="status" defaultValue={t.status}><option value="open">Open</option><option value="in_progress">In progress</option><option value="done">Done</option><option value="cancelled">Cancelled</option></select><button>Save</button></form></div>)}{!tasks?.length && <p className="muted">No tasks yet.</p>}</div>
     </Section>}
@@ -89,7 +89,7 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
     {tab === "expenses" && <Section title="Expenses">
       <details className="record-details"><summary>+ Add expense</summary><form action={addExpense} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
         <label>Category<select name="category"><option value="labor">Labor</option><option value="seed">Seed</option><option value="fertilizer">Fertilizer</option><option value="pesticide">Pesticide</option><option value="machinery">Machinery</option><option value="irrigation">Irrigation</option><option value="fuel">Fuel</option><option value="transport">Transport</option><option value="other">Other</option></select></label>
-        <label>Date<input type="date" name="expense_date" required/></label><label>Amount (PKR)<input type="number" min="0.01" step="0.01" name="amount" required/></label><button>Add expense</button>
+        <label>Date<input type="date" name="expense_date" required/></label><label>Amount (PKR)<input type="number" min="0.01" step="0.01" name="amount" required/></label><label className="full-field">Notes / description<textarea name="description" rows={3} placeholder="Vendor, purpose, receipt reference…"/></label><button>Add expense</button>
       </form></details>
       <List empty="No expenses recorded yet." rows={(expenses || []).map(e => ({ a: e.category, b: e.expense_date, c: "PKR " + Number(e.amount).toLocaleString() + " · " + (e.description || "No notes") }))}/>
     </Section>}
@@ -107,7 +107,7 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
         <label>Harvest date<input type="date" name="harvest_date" required/></label>
         <label>Quantity<input type="number" min="0.001" step="0.001" name="quantity" required/></label>
         <label>Unit<select name="unit"><option value="kg">kg</option><option value="maund">maund</option><option value="ton">ton</option><option value="bag">bag</option><option value="unit">unit</option></select></label>
-        <label>Grade<input name="grade"/></label>
+        <label>Grade<input name="grade"/></label><label className="full-field">Notes<textarea name="notes" rows={3} placeholder="Picking, quality, storage or other notes…"/></label>
         <button>Add harvest output</button>
       </form></details>}
       <List empty="No harvest recorded yet." rows={(harvests || []).map(h => ({ a: h.product_name + " · " + h.quantity + " " + h.unit, b: h.harvest_date, c: (h.product_kind === "primary" ? "Primary product" : "By-product") + " · " + (h.grade || "Grade not specified") }))}/>
@@ -123,7 +123,7 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
           <label>Inventory item<select name="stock_item" required>{inventory.map(i => <option key={JSON.stringify([i.productKind,i.productName,i.unit])} value={JSON.stringify([i.productKind,i.productName,i.unit])}>{i.productName} · {i.remaining.toLocaleString()} {i.unit} available</option>)}</select></label>
           <label>Sale date<input type="date" name="sale_date" required/></label><label>Quantity<input type="number" min="0.001" step="0.001" name="quantity" required/></label>
           <label>Rate / unit (PKR)<input type="number" min="0" step="0.01" name="rate_per_unit" required/></label>
-          <label>Payment<select name="payment_status"><option value="unpaid">Unpaid</option><option value="partial">Partial</option><option value="paid">Paid</option></select></label>
+          <label>Payment<select name="payment_status"><option value="unpaid">Unpaid</option><option value="partial">Partial</option><option value="paid">Paid</option></select></label><label className="full-field">Notes<textarea name="notes" rows={3} placeholder="Payment terms, transport, invoice or other notes…"/></label>
           <button disabled={!inventory.length}>Record sale</button>
         </form>
       </div>
