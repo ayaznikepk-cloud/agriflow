@@ -9,7 +9,6 @@ export default async function Page() {
   const revenue = (data || []).reduce((n, x) => n + Number(x.total_amount || 0), 0);
 
   return <>
-    <Nav />
     <h1>Sales</h1>
     <p className="muted">Sales of primary products and by-products.</p>
     <section className="stats">
