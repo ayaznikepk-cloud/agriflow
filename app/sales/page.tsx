@@ -8,8 +8,7 @@ export default async function Page() {
     .order("sale_date", { ascending: false });
   const revenue = (data || []).reduce((n, x) => n + Number(x.total_amount || 0), 0);
 
-  return <main className="app-shell">
-    <Nav />
+  return <>
     <h1>Sales</h1>
     <p className="muted">Sales of primary products and by-products.</p>
     <section className="stats">
@@ -23,11 +22,5 @@ export default async function Page() {
       </div>)}
       {!data?.length && <p className="muted">No sales yet.</p>}
     </div></section>
-  </main>;
-}
-
-function Nav() {
-  return <nav className="main-nav">{["Dashboard","Fields","Crop cycles","Activities","Tasks","Expenses","Harvests","Inventory","Sales","Reports"].map(n =>
-    <Link className={n === "Sales" ? "active" : ""} key={n} href={n === "Dashboard" ? "/dashboard" : "/" + n.toLowerCase().replace(" ", "-")}>{n}</Link>
-  )}</nav>;
+  </>;
 }

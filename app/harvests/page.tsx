@@ -7,8 +7,7 @@ export default async function Page() {
     .select("*, crop_cycles(crops(name), fields(name))")
     .order("harvest_date", { ascending: false });
 
-  return <main className="app-shell">
-    <Nav />
+  return <>
     <h1>Harvests</h1>
     <p className="muted">Production records for primary products and by-products.</p>
     <section className="panel"><div className="history">
@@ -18,11 +17,5 @@ export default async function Page() {
       </div>)}
       {!data?.length && <p className="muted">No harvests yet.</p>}
     </div></section>
-  </main>;
-}
-
-function Nav() {
-  return <nav className="main-nav">{["Dashboard","Fields","Crop cycles","Activities","Tasks","Expenses","Harvests","Inventory","Sales","Reports"].map(n =>
-    <Link className={n === "Harvests" ? "active" : ""} key={n} href={n === "Dashboard" ? "/dashboard" : "/" + n.toLowerCase().replace(" ", "-")}>{n}</Link>
-  )}</nav>;
+  </>;
 }
