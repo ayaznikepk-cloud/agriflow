@@ -8,7 +8,6 @@ export default async function Page() {
     .order("harvest_date", { ascending: false });
 
   return <>
-    <Nav />
     <h1>Harvests</h1>
     <p className="muted">Production records for primary products and by-products.</p>
     <section className="panel"><div className="history">
