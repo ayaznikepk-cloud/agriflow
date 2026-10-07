@@ -92,3 +92,20 @@
  .stats.finance-stats strong{font-size:23px;line-height:1.1;overflow-wrap:anywhere}
  .stats.finance-stats span{font-size:13px}
 }
+
+/* Harvest and sales: keep records visible, forms on demand. */
+.record-details{border:1px solid var(--line);border-radius:12px;margin:14px 0;background:var(--card)}
+.record-details>summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:800;color:var(--green)}
+.record-details>summary::-webkit-details-marker{display:none}
+.record-details[open]>summary{border-bottom:1px solid var(--line)}
+.record-details>.form{padding:16px}
+@media(max-width:760px){
+ .harvest-head{display:grid;grid-template-columns:1fr;gap:10px}
+ .harvest-head form,.harvest-head .action-button{width:100%}
+ .inventory-grid{gap:10px}
+ .inventory-grid article{padding:14px;min-height:auto}
+ .inventory-grid article strong{font-size:21px}
+ .sales-tools{gap:12px}
+ .sale-form{padding-top:4px}
+ .buyer-details{margin:0 0 8px}
+}
