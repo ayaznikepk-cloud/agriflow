@@ -35,11 +35,11 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
   }).filter(i => i.remaining > 0);
 
   return <main className="app-shell">
-    <Link href="/dashboard" className="back-link">← Farm workspace</Link>
+    <Link href="/crop-cycles" className="back-link">← Crop cycles</Link>
     <section className="panel detail-hero">
       <span className="eyebrow">CROP CYCLE</span><h1>{c.crops?.name}</h1>
       <p className="muted">{c.crop_varieties?.name || "Variety not specified"} · {c.fields?.name} · {c.farms?.name}</p>
-      <span className="pill">{c.status}</span>
+      <span className="pill">{c.status==="active"?"Growing":c.status==="harvest_complete"?"Harvest complete":c.status==="harvesting"?"Harvesting":c.status[0].toUpperCase()+c.status.slice(1)}</span>
     </section>
 
     <nav className="cycle-tabs">{tabs.map(t => <Link key={t} className={tab === t ? "active" : ""} href={"/crop-cycles/" + id + "?tab=" + t}>{t[0].toUpperCase() + t.slice(1)}</Link>)}</nav>
@@ -62,7 +62,7 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
           <form action={updateCycleStatus} className="form">
             <input type="hidden" name="id" value={c.id} />
             <label>Crop cycle status<select name="status" defaultValue={c.status}>
-              <option value="planned">Planned</option><option value="active">Active</option><option value="harvesting">Harvesting</option><option value="harvest_complete">Harvest complete</option><option value="closed">Closed</option><option value="cancelled">Cancelled</option>
+              <option value="planned">Planned</option><option value="active">Growing</option><option value="harvesting">Harvesting</option><option value="harvest_complete">Harvest complete</option><option value="closed">Closed</option><option value="cancelled">Cancelled</option>
             </select></label>
             <label>Actual harvest date<input type="date" name="actual_harvest_date" defaultValue={c.actual_harvest_date || ""} /></label>
             <button>Update status</button>
