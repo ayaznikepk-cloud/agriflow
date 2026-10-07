@@ -27,6 +27,7 @@ export async function addActivity(f: FormData) {
   });
   if (error) throw new Error(error.message);
   revalidatePath("/crop-cycles/" + id);
+  revalidatePath("/activities");
 }
 
 export async function addTask(f: FormData) {
@@ -43,6 +44,7 @@ export async function addTask(f: FormData) {
   });
   if (error) throw new Error(error.message);
   revalidatePath("/crop-cycles/" + id);
+  revalidatePath("/tasks");
 }
 
 export async function updateTask(f: FormData) {
@@ -53,6 +55,7 @@ export async function updateTask(f: FormData) {
   const { error } = await s.from("tasks").update({ status }).eq("id", String(f.get("task_id")));
   if (error) throw new Error(error.message);
   revalidatePath("/crop-cycles/" + id);
+  revalidatePath("/tasks");
 }
 
 export async function addExpense(f: FormData) {
