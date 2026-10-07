@@ -36,8 +36,8 @@ export default async function InventoryPage() {
     };
   }).filter(x => x.remaining > 0);
 
-  return <main className="app-shell">
-    <nav className="main-nav">{nav.map(n => <Link className={n === "Inventory" ? "active" : ""} key={n} href={n === "Dashboard" ? "/dashboard" : "/" + n.toLowerCase().replace(" ", "-")}>{n}</Link>)}</nav>
+  return <>
+    
     <header className="page-head"><span className="eyebrow">STOCK</span><h1>Inventory</h1><p className="muted">Primary products and by-products currently available for sale.</p></header>
     <section className="panel"><div className="table inventory-table">
       {rows.map(x => <Link href={"/crop-cycles/" + x.id + "?tab=sales"} className="row row-link" key={[x.id,x.productKind,x.productName,x.unit].join("|")}>
@@ -48,5 +48,5 @@ export default async function InventoryPage() {
       </Link>)}
       {!rows.length && <p className="muted">No stock is currently available for sale.</p>}
     </div></section>
-  </main>;
+  </>;
 }
