@@ -58,15 +58,17 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
           <div><dt>Actual harvest</dt><dd>{c.actual_harvest_date || "—"}</dd></div>
           <div><dt>Harvest output lines</dt><dd>{harvests?.length || 0}</dd></div>
         </dl></article>
-        <article className="panel"><h2>Lifecycle</h2><p className="muted">Move this crop cycle to the next stage as field work progresses.</p>
-          <form action={updateCycleStatus} className="form lifecycle-form">
-            <input type="hidden" name="id" value={c.id} />
-            <label>Status<select name="status" defaultValue={c.status}>
-              <option value="planned">Planned</option><option value="active">Growing</option><option value="harvesting">Harvesting</option><option value="harvest_complete">Harvest complete</option><option value="closed">Closed</option><option value="cancelled">Cancelled</option>
-            </select></label>
-            <label>Actual harvest date<input type="date" name="actual_harvest_date" defaultValue={c.actual_harvest_date || ""} /></label>
-            <button>Save lifecycle</button>
-          </form>
+        <article className="panel"><h2>Lifecycle</h2>
+          <p className="muted">{c.status === "planned" ? "This cycle is planned and field work has not started." : c.status === "active" ? "The crop is growing. Start harvesting when the first picking begins." : c.status === "harvesting" ? "Harvesting is in progress. Record every picking before completing it." : c.status === "harvest_complete" ? "Harvesting is complete. You can continue selling remaining inventory or close the cycle." : c.status === "closed" ? "This crop cycle is closed." : "This crop cycle is cancelled."}</p>
+          <div className="lifecycle-actions">
+            {c.status === "planned" && <LifecycleAction id={c.id} status="active" label="Start growing" />}
+            {c.status === "active" && <LifecycleAction id={c.id} status="harvesting" label="Start harvesting" />}
+            {c.status === "harvesting" && <Link className="button-link" href={"/crop-cycles/" + c.id + "?tab=harvest"}>Go to harvest</Link>}
+            {c.status === "harvest_complete" && <><LifecycleAction id={c.id} status="harvesting" label="Reopen harvesting" secondary/><LifecycleAction id={c.id} status="closed" label="Close cycle" /></>}
+            {c.status === "closed" && <span className="pill">Closed</span>}
+            {c.status === "cancelled" && <span className="pill">Cancelled</span>}
+          </div>
+          {!["closed","cancelled"].includes(c.status) && <details className="danger-zone"><summary>Other lifecycle actions</summary><div className="danger-actions"><LifecycleAction id={c.id} status="cancelled" label="Cancel cycle" secondary/></div></details>}
         </article>
       </section>
     </>}
@@ -130,6 +132,10 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
       <List empty="No sales recorded yet." rows={(sales || []).map(x => ({ a: x.product_name + " · " + x.quantity + " " + x.unit + " · PKR " + Number(x.total_amount || 0).toLocaleString(), b: x.sale_date, c: (x.product_kind === "primary" ? "Primary product" : "By-product") + " · " + (x.buyers?.name || "Buyer not specified") + " · " + x.payment_status }))}/>
     </Section>}
   </main>;
+}
+
+function LifecycleAction({ id, status, label, secondary = false }: { id: string, status: string, label: string, secondary?: boolean }) {
+  return <form action={updateCycleStatus}><input type="hidden" name="id" value={id}/><input type="hidden" name="status" value={status}/><button className={secondary ? "secondary" : ""}>{label}</button></form>;
 }
 
 function Section({ title, children }: { title: string, children: React.ReactNode }) {
