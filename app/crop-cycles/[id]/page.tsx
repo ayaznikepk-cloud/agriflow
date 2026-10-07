@@ -4,7 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { updateCycleStatus } from "@/app/dashboard/actions";
 import { addActivity, addTask, updateTask, addExpense, addHarvest, completeHarvesting, reopenHarvesting, addBuyer, addSale } from "./actions";
 
-const tabs = ["overview", "activities", "tasks", "expenses", "harvest", "sales"] as const;\nconst tabLabels: Record<typeof tabs[number], string> = { overview: "Overview", activities: "Activities", tasks: "Tasks", expenses: "Expenses", harvest: "Harvests", sales: "Sales" };
+const tabs = ["overview", "activities", "tasks", "expenses", "harvest", "sales"] as const;
+const tabLabels: Record<typeof tabs[number], string> = { overview: "Overview", activities: "Activities", tasks: "Tasks", expenses: "Expenses", harvest: "Harvests", sales: "Sales" };
 
 export default async function CyclePage({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ tab?: string, error?: string }> }) {
   const { id } = await params;
