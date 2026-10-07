@@ -96,11 +96,11 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
 
     {tab === "harvest" && <Section title="Harvest outputs">
       {error && <p className="notice error">{error}</p>}
-      <div className="section-head"><div><strong>{harvests?.length || 0} output line{harvests?.length === 1 ? "" : "s"}</strong><p className="muted">Record the primary product and any by-products separately for every picking or harvest.</p></div>
+      <div className="section-head harvest-head"><div><strong>{harvests?.length || 0} output line{harvests?.length === 1 ? "" : "s"}</strong><p className="muted">Record each picking and by-product separately.</p></div>
         {c.status === "harvest_complete" ? <form action={reopenHarvesting}><input type="hidden" name="crop_cycle_id" value={c.id}/><button className="secondary action-button">Reopen harvesting</button></form>
         : c.status !== "closed" && c.status !== "cancelled" && harvests?.length ? <form action={completeHarvesting}><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="actual_harvest_date" value={harvests[0]?.harvest_date || ""}/><button className="action-button">Complete harvesting</button></form> : null}
       </div>
-      {!["harvest_complete", "closed", "cancelled"].includes(c.status) && <form action={addHarvest} className="form section-form">
+      {!["harvest_complete", "closed", "cancelled"].includes(c.status) && <details className="record-details"><summary>+ Add harvest output</summary><form action={addHarvest} className="form section-form">
         <input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
         <label>Output type<select name="product_kind"><option value="primary">Primary product</option><option value="by_product">By-product</option></select></label>
         <label>Product name<input name="product_name" defaultValue={c.crops?.name || ""} placeholder="e.g. Cotton lint, Cotton seed, Wheat straw" required/></label>
@@ -109,7 +109,7 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
         <label>Unit<select name="unit"><option value="kg">kg</option><option value="maund">maund</option><option value="ton">ton</option><option value="bag">bag</option><option value="unit">unit</option></select></label>
         <label>Grade<input name="grade"/></label>
         <button>Add harvest output</button>
-      </form>}
+      </form></details>}
       <List empty="No harvest recorded yet." rows={(harvests || []).map(h => ({ a: h.product_name + " · " + h.quantity + " " + h.unit, b: h.harvest_date, c: (h.product_kind === "primary" ? "Primary product" : "By-product") + " · " + (h.grade || "Grade not specified") }))}/>
     </Section>}
 
@@ -117,10 +117,10 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
       {error && <p className="notice error">{error}</p>}
       <div className="inventory-grid">{inventory.map(i => <article key={JSON.stringify([i.productKind,i.productName,i.unit])}><strong>{i.remaining.toLocaleString()} {i.unit}</strong><span>{i.productName}</span><small>{i.productKind === "primary" ? "Primary product" : "By-product"} · {i.harvested.toLocaleString()} harvested · {i.sold.toLocaleString()} sold</small></article>)}{!inventory.length && <p className="muted">Record a harvest output before entering sales.</p>}</div>
       <div className="sales-tools">
-        <form action={addBuyer} className="form"><input type="hidden" name="farm_id" value={c.farm_id}/><input type="hidden" name="crop_cycle_id" value={c.id}/><label>New buyer<input name="name" required/></label><label>Phone<input name="phone"/></label><button>Add buyer</button></form>
-        <form action={addSale} className="form"><input type="hidden" name="farm_id" value={c.farm_id}/><input type="hidden" name="crop_cycle_id" value={c.id}/>
+        <details className="record-details buyer-details"><summary>+ Add buyer</summary><form action={addBuyer} className="form"><input type="hidden" name="farm_id" value={c.farm_id}/><input type="hidden" name="crop_cycle_id" value={c.id}/><label>Buyer name<input name="name" required/></label><label>Phone<input name="phone"/></label><button>Add buyer</button></form></details>
+        <form action={addSale} className="form sale-form"><input type="hidden" name="farm_id" value={c.farm_id}/><input type="hidden" name="crop_cycle_id" value={c.id}/>
           <label>Buyer<select name="buyer_id"><option value="">Not specified</option>{buyers?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</select></label>
-          <label>Inventory item<select name="stock_item" required>{inventory.map(i => <option key={JSON.stringify([i.productKind,i.productName,i.unit])} value={JSON.stringify([i.productKind,i.productName,i.unit])}>{i.productName} · {i.productKind === "primary" ? "Primary" : "By-product"} · {i.remaining.toLocaleString()} {i.unit} available</option>)}</select></label>
+          <label>Inventory item<select name="stock_item" required>{inventory.map(i => <option key={JSON.stringify([i.productKind,i.productName,i.unit])} value={JSON.stringify([i.productKind,i.productName,i.unit])}>{i.productName} · {i.remaining.toLocaleString()} {i.unit} available</option>)}</select></label>
           <label>Sale date<input type="date" name="sale_date" required/></label><label>Quantity<input type="number" min="0.001" step="0.001" name="quantity" required/></label>
           <label>Rate / unit (PKR)<input type="number" min="0" step="0.01" name="rate_per_unit" required/></label>
           <label>Payment<select name="payment_status"><option value="unpaid">Unpaid</option><option value="partial">Partial</option><option value="paid">Paid</option></select></label>
