@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { createExpense, deleteExpense, updateExpense } from "./actions";
+import { createExpense, updateExpense } from "./actions";
 
 const categoryLabels: Record<string,string> = {
   labor:"Labor", seed:"Seed", fertilizer:"Fertilizer", pesticide:"Pesticide / spray",
@@ -104,7 +104,7 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
           <label className="full-field">Vendor / reference / notes<textarea name="description" rows={3} defaultValue={x.description||""}/></label>
           <button>Save changes</button>
         </form></details>
-        <div className="task-status"><Link className="button-link" href={"/crop-cycles/"+x.crop_cycle_id+"?tab=expenses"}>Open cycle</Link><form action={deleteExpense}><input type="hidden" name="expense_id" value={x.id}/><input type="hidden" name="crop_cycle_id" value={x.crop_cycle_id}/><button className="secondary">Delete</button></form></div>
+        <div className="task-status"><Link className="button-link" href={"/crop-cycles/"+x.crop_cycle_id+"?tab=expenses"}>Open cycle</Link></div>
       </article>)}{!expenses.length&&<p className="muted">No expenses match these filters.</p>}</div>
     </section>
   </>;
