@@ -73,6 +73,7 @@ export async function addExpense(f: FormData) {
   });
   if (error) throw new Error(error.message);
   revalidatePath("/crop-cycles/" + id);
+  revalidatePath("/expenses");
 }
 
 export async function addHarvest(f: FormData) {

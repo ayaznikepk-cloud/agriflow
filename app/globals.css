@@ -139,3 +139,7 @@
 
 /* Desktop crop-cycle cleanup */
 .harvest-head form button{min-height:42px;padding:10px 16px;border:0;border-radius:9px;background:var(--green);color:#fff;font:inherit;font-weight:800;cursor:pointer}.harvest-head{align-items:center}.harvest-head>div{max-width:620px}.stats.finance-stats article{min-width:0}.stats.finance-stats strong{overflow-wrap:anywhere}@media(min-width:761px){.stats.finance-stats{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}.stats.finance-stats article{padding:20px}.stats.finance-stats strong{font-size:28px}.detail-hero{padding:28px}.cycle-tabs{padding-left:0;padding-right:0}}
+
+
+/* Expenses financial workspace */
+.expense-filters{grid-template-columns:repeat(4,minmax(0,1fr)) auto auto;align-items:end;margin:18px 0}.expense-filters .button-link{min-height:43px}.compact-details{margin:10px 0 0}.compact-details>summary{padding:10px 12px}.compact-details .form{margin-top:0}.history-item .back-link{margin:8px 0 0;font-size:13px}@media(max-width:900px){.expense-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:760px){.expense-filters{grid-template-columns:1fr}.expense-filters button,.expense-filters .button-link{width:100%}.detail-grid{grid-template-columns:1fr}.history-item>div{gap:8px}.history-item>div>span{white-space:normal;text-align:right}}
