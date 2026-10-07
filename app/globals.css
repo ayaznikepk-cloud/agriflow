@@ -26,3 +26,15 @@
   .inventory-grid{grid-template-columns:1fr}
   .section-head{align-items:flex-start}
 }
+
+/* Crop-cycle list readability */
+@media(min-width:761px){.page-head-with-action{margin-bottom:24px}}
+@media(max-width:760px){
+ .page-head-with-action{align-items:flex-end}
+ .page-head-with-action h1{font-size:32px}
+ .page-head-with-action .muted{margin-bottom:0}
+ .page-head-with-action .page-actions>button{font-size:13px}
+ .row{grid-template-columns:minmax(0,1.5fr) minmax(70px,.8fr)}
+ .row>span:nth-child(3){display:none}
+ .row .pill{justify-self:start}
+}
