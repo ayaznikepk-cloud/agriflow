@@ -15,15 +15,12 @@ export default async function WorkspaceShell({ children }: { children: React.Rea
       <div className="workspace-brand">
         <span className="eyebrow">AGRIFLOW</span>
         <div className="workspace-title-row">
-          <div>
-            <h1>Farm workspace</h1>
-            <p className="muted">{farmName}</p>
-          </div>
-          <form action={logout}><button className="secondary workspace-signout">Sign out</button></form>
+          <div><h1>Farm workspace</h1><p className="muted">{farmName}</p></div>
+          <form action={logout} className="desktop-signout"><button className="secondary workspace-signout">Sign out</button></form>
         </div>
       </div>
+      <PrimaryNav />
     </header>
-    <PrimaryNav />
     <div className="workspace-content">{children}</div>
   </main>;
 }
