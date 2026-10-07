@@ -7,3 +7,22 @@
 
 .workspace-header{margin-bottom:18px}.workspace-brand{width:100%}.workspace-title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}.workspace-title-row h1{font-size:38px;letter-spacing:-.04em;margin:8px 0 2px}.workspace-title-row p{margin:0}.workspace-signout{white-space:nowrap}.workspace-content>h1{font-size:40px;letter-spacing:-.035em;margin:12px 0 8px}.page-head-with-action{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}.page-actions>button{border:0;border-radius:9px;background:var(--green);color:white;padding:12px 18px;font-weight:800;cursor:pointer;white-space:nowrap}.form-drawer-backdrop{position:fixed;inset:0;background:rgba(23,32,24,.35);z-index:50;display:flex;justify-content:flex-end}.form-drawer{width:min(480px,100%);height:100%;overflow:auto;background:var(--card);padding:28px;box-shadow:-12px 0 40px rgba(23,32,24,.12)}.drawer-head{display:flex;justify-content:space-between;gap:16px}.drawer-head h2{font-size:30px;margin:8px 0}.drawer-head p{margin:0}.icon-button{border:0!important;background:transparent!important;color:var(--ink)!important;font-size:32px!important;padding:0 4px!important;height:40px}.drawer-form{margin-top:24px}.optional-fields{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0}.optional-fields summary{cursor:pointer;font-weight:800}.optional-fields summary span{float:right;color:var(--muted);font-size:12px;font-weight:600}.optional-fields-body{margin-top:16px}.drawer-actions{display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:-28px;background:var(--card);padding:16px 0 28px}.drawer-actions button{min-width:110px}.history-item>div>span{white-space:nowrap}.main-nav{scrollbar-width:none}.main-nav::-webkit-scrollbar{display:none}
 @media(max-width:760px){.workspace-title-row{align-items:center}.workspace-title-row h1{font-size:24px}.workspace-title-row p{font-size:13px}.workspace-signout{padding:9px 11px!important}.main-nav{margin-left:-24px;margin-right:-24px;padding-left:24px;padding-right:24px}.page-head-with-action{align-items:center}.page-head-with-action .page-actions>button{padding:11px 13px}.form-drawer-backdrop{align-items:flex-end}.form-drawer{width:100%;height:min(88vh,760px);border-radius:20px 20px 0 0;padding:22px}.drawer-actions{bottom:-22px;padding-bottom:22px}.history-item>div{align-items:flex-start}.history-item>div>span{font-size:12px}}
+
+/* Mobile app shell: keep every control inside the viewport and avoid desktop-style horizontal overflow. */
+@media(max-width:760px){
+  .app-shell{width:100%;max-width:100%;padding:20px 16px 56px;overflow-x:hidden}
+  .workspace-header{margin-bottom:14px}
+  .workspace-title-row{align-items:flex-start;gap:10px}
+  .workspace-title-row>div{min-width:0}
+  .workspace-title-row h1{font-size:26px;line-height:1.08;white-space:normal}
+  .workspace-signout{font-size:0;width:42px;height:42px;padding:0!important;display:grid;place-items:center}
+  .workspace-signout:after{content:"↪";font-size:20px}
+  .main-nav{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px;max-width:calc(100% + 32px);gap:4px}
+  .main-nav a{padding:9px 10px}
+  .stats,.finance-stats{grid-template-columns:1fr!important;gap:12px;margin:20px 0}
+  .stats article{padding:20px}
+  .stats strong{font-size:30px}
+  .panel{padding:20px}
+  .inventory-grid{grid-template-columns:1fr}
+  .section-head{align-items:flex-start}
+}
