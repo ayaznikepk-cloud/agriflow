@@ -367,6 +367,8 @@ export type Database = {
           harvest_date: string
           id: string
           notes: string | null
+          product_kind: string
+          product_name: string
           quantity: number
           unit: string
         }
@@ -378,6 +380,8 @@ export type Database = {
           harvest_date: string
           id?: string
           notes?: string | null
+          product_kind?: string
+          product_name: string
           quantity: number
           unit: string
         }
@@ -389,6 +393,8 @@ export type Database = {
           harvest_date?: string
           id?: string
           notes?: string | null
+          product_kind?: string
+          product_name?: string
           quantity?: number
           unit?: string
         }
@@ -418,6 +424,8 @@ export type Database = {
           id: string
           notes: string | null
           payment_status: string
+          product_kind: string
+          product_name: string
           quantity: number
           rate_per_unit: number
           sale_date: string
@@ -432,6 +440,8 @@ export type Database = {
           id?: string
           notes?: string | null
           payment_status?: string
+          product_kind?: string
+          product_name: string
           quantity: number
           rate_per_unit: number
           sale_date?: string
@@ -446,6 +456,8 @@ export type Database = {
           id?: string
           notes?: string | null
           payment_status?: string
+          product_kind?: string
+          product_name?: string
           quantity?: number
           rate_per_unit?: number
           sale_date?: string
