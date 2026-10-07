@@ -72,25 +72,25 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
     </>}
 
     {tab === "activities" && <Section title="Activities">
-      <form action={addActivity} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
+      <details className="record-details"><summary>+ Add activity</summary><form action={addActivity} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
         <label>Activity<select name="activity_type"><option value="irrigation">Irrigation</option><option value="fertilizer">Fertilizer</option><option value="pesticide">Pesticide</option><option value="weeding">Weeding</option><option value="spraying">Spraying</option><option value="sowing">Sowing</option><option value="harvesting">Harvesting</option><option value="other">Other</option></select></label>
         <label>Date<input type="date" name="activity_date" required/></label><label>Description<input name="description"/></label><button>Add activity</button>
-      </form>
+      </form></details>
       <List empty="No activities recorded yet." rows={(activities || []).map(a => ({ a: a.activity_type, b: a.activity_date, c: a.description || "No notes" }))}/>
     </Section>}
 
     {tab === "tasks" && <Section title="Tasks">
-      <form action={addTask} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
+      <details className="record-details"><summary>+ Add task</summary><form action={addTask} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
         <label>Task<input name="title" required/></label><label>Due date<input type="date" name="due_date"/></label><label>Priority<select name="priority"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label><button>Add task</button>
-      </form>
+      </form></details>
       <div className="history">{(tasks || []).map(t => <div className="history-item" key={t.id}><div><strong>{t.title}</strong><span>{t.due_date || "No due date"} · {t.priority}</span></div><form action={updateTask} className="task-status"><input type="hidden" name="task_id" value={t.id}/><input type="hidden" name="crop_cycle_id" value={c.id}/><select name="status" defaultValue={t.status}><option value="open">Open</option><option value="in_progress">In progress</option><option value="done">Done</option><option value="cancelled">Cancelled</option></select><button>Save</button></form></div>)}{!tasks?.length && <p className="muted">No tasks yet.</p>}</div>
     </Section>}
 
     {tab === "expenses" && <Section title="Expenses">
-      <form action={addExpense} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
+      <details className="record-details"><summary>+ Add expense</summary><form action={addExpense} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
         <label>Category<select name="category"><option value="labor">Labor</option><option value="seed">Seed</option><option value="fertilizer">Fertilizer</option><option value="pesticide">Pesticide</option><option value="machinery">Machinery</option><option value="irrigation">Irrigation</option><option value="fuel">Fuel</option><option value="transport">Transport</option><option value="other">Other</option></select></label>
         <label>Date<input type="date" name="expense_date" required/></label><label>Amount (PKR)<input type="number" min="0.01" step="0.01" name="amount" required/></label><button>Add expense</button>
-      </form>
+      </form></details>
       <List empty="No expenses recorded yet." rows={(expenses || []).map(e => ({ a: e.category, b: e.expense_date, c: "PKR " + Number(e.amount).toLocaleString() + " · " + (e.description || "No notes") }))}/>
     </Section>}
 
