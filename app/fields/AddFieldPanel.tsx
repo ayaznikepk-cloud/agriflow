@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function AddFieldPanel({ farmId, action }: { farmId: string; action: (formData: FormData) => void | Promise<void> }) {
+export default function AddFieldPanel({ farmId, action }: { farmId: string; action: (formData: FormData) => Promise<void> }) {
   const [open, setOpen] = useState(false);
   return <>
     <div className="page-actions">
