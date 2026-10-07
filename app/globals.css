@@ -67,3 +67,13 @@
  .section-form{grid-template-columns:1fr}
  .sales-tools{grid-template-columns:1fr}
 }
+
+/* Mobile crop-cycle page: keep title/action readable at 360px. */
+@media(max-width:760px){
+ .page-head-with-action{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+ .page-head-with-action>div{min-width:0}
+ .page-head-with-action h1{font-size:32px;line-height:1.05;white-space:nowrap}
+ .page-head-with-action .muted{max-width:30ch}
+ .page-head-with-action>.page-actions{width:100%}
+ .page-head-with-action>.page-actions>button{width:100%;min-height:44px}
+}
