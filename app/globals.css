@@ -38,3 +38,20 @@
  .row>span:nth-child(3){display:none}
  .row .pill{justify-self:start}
 }
+
+.mobile-menu-button{display:none}
+@media(max-width:760px){
+ .workspace-header{position:relative;padding-right:52px}
+ .desktop-nav,.desktop-signout{display:none!important}
+ .mobile-menu-button{display:flex;position:absolute;right:0;top:8px;width:42px;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--card);align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer}
+ .mobile-menu-button span{display:block;width:18px;height:2px;background:var(--green);border-radius:2px}
+ .mobile-menu-backdrop{position:fixed;inset:0;z-index:80;background:rgba(23,32,24,.4);display:flex;justify-content:flex-end}
+ .mobile-menu{width:min(310px,86vw);height:100%;background:var(--card);padding:22px;box-shadow:-12px 0 40px rgba(23,32,24,.16)}
+ .mobile-menu-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line)}
+ .mobile-menu-head strong{font-size:20px}
+ .mobile-menu-head button{border:0;background:transparent;color:var(--ink);font-size:30px;cursor:pointer}
+ .mobile-menu nav{display:grid;padding-top:10px}
+ .mobile-menu nav a{padding:13px 12px;border-radius:9px;color:var(--ink);font-weight:800;text-decoration:none}
+ .mobile-menu nav a.active{background:#e7efe5;color:var(--green)}
+ .workspace-title-row h1{font-size:26px}
+}
