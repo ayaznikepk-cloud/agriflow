@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { updateCycleStatus } from "@/app/dashboard/actions";
 import { addActivity, addTask, updateTask, addExpense, addHarvest, completeHarvesting, reopenHarvesting, addBuyer, addSale } from "./actions";
 
-const tabs = ["overview", "activities", "tasks", "expenses", "harvest", "sales"] as const;
+const tabs = ["overview", "activities", "tasks", "expenses", "harvest", "sales"] as const;\nconst tabLabels: Record<typeof tabs[number], string> = { overview: "Overview", activities: "Activities", tasks: "Tasks", expenses: "Expenses", harvest: "Harvests", sales: "Sales" };
 
 export default async function CyclePage({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ tab?: string, error?: string }> }) {
   const { id } = await params;
@@ -42,14 +42,14 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
       <span className="pill">{c.status==="active"?"Growing":c.status==="harvest_complete"?"Harvest complete":c.status==="harvesting"?"Harvesting":c.status[0].toUpperCase()+c.status.slice(1)}</span>
     </section>
 
-    <nav className="cycle-tabs">{tabs.map(t => <Link key={t} className={tab === t ? "active" : ""} href={"/crop-cycles/" + id + "?tab=" + t}>{t[0].toUpperCase() + t.slice(1)}</Link>)}</nav>
+    <nav className="cycle-tabs">{tabs.map(t => <Link key={t} className={tab === t ? "active" : ""} href={"/crop-cycles/" + id + "?tab=" + t}>{tabLabels[t]}</Link>)}</nav>
 
     {tab === "overview" && <>
       <section className="stats finance-stats">
         <article><strong>{c.planted_area} {c.area_unit}</strong><span>Planted area</span></article>
         <article><strong>PKR {expense.toLocaleString()}</strong><span>Total cost</span></article>
         <article><strong>PKR {revenue.toLocaleString()}</strong><span>Revenue</span></article>
-        <article><strong>PKR {(revenue - expense).toLocaleString()}</strong><span>Gross profit / loss</span></article>
+        <article><strong>PKR {(revenue - expense).toLocaleString()}</strong><span>Gross profit / loss</span></article>\n        <article><strong>{inventory.reduce((n,i)=>n+i.remaining,0).toLocaleString()}</strong><span>Stock units available*</span></article>
       </section>
       <section className="detail-grid">
         <article className="panel"><h2>Crop details</h2><dl>
@@ -78,14 +78,14 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
         <label>Activity<select name="activity_type"><option value="irrigation">Irrigation</option><option value="fertilizer">Fertilizer</option><option value="pesticide">Pesticide</option><option value="weeding">Weeding</option><option value="spraying">Spraying</option><option value="sowing">Sowing</option><option value="harvesting">Harvesting</option><option value="other">Other</option></select></label>
         <label>Date<input type="date" name="activity_date" required/></label><label className="full-field">Notes / description<textarea name="description" rows={3} placeholder="Work done, inputs used, observations…"/></label><button>Add activity</button>
       </form></details>
-      <List empty="No activities recorded yet." rows={(activities || []).map(a => ({ a: a.activity_type, b: a.activity_date, c: a.description || "No notes" }))}/>
+      <List empty="No activities recorded yet." rows={(activities || []).map(a => ({ a: a.activity_type, b: a.activity_date, c: a.description || "" }))}/>
     </Section>}
 
     {tab === "tasks" && <Section title="Tasks">
       <details className="record-details"><summary>+ Add task</summary><form action={addTask} className="form section-form"><input type="hidden" name="crop_cycle_id" value={c.id}/><input type="hidden" name="farm_id" value={c.farm_id}/>
         <label>Task<input name="title" required/></label><label>Due date<input type="date" name="due_date"/></label><label>Priority<select name="priority"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label><label className="full-field">Notes<textarea name="notes" rows={3} placeholder="Instructions or additional details…"/></label><button>Add task</button>
       </form></details>
-      <div className="history">{(tasks || []).map(t => <div className="history-item" key={t.id}><div><strong>{t.title}</strong><span>{t.due_date || "No due date"} · {t.priority}</span></div><form action={updateTask} className="task-status"><input type="hidden" name="task_id" value={t.id}/><input type="hidden" name="crop_cycle_id" value={c.id}/><select name="status" defaultValue={t.status}><option value="open">Open</option><option value="in_progress">In progress</option><option value="done">Done</option><option value="cancelled">Cancelled</option></select><button>Save</button></form></div>)}{!tasks?.length && <p className="muted">No tasks yet.</p>}</div>
+      <div className="history">{(tasks || []).map(t => <div className="history-item" key={t.id}><div><strong>{t.title}</strong><span>{t.due_date || "No due date"} · {t.priority}</span>{t.notes && <p>{t.notes}</p>}</div><form action={updateTask} className="task-status"><input type="hidden" name="task_id" value={t.id}/><input type="hidden" name="crop_cycle_id" value={c.id}/><select name="status" defaultValue={t.status}><option value="open">Open</option><option value="in_progress">In progress</option><option value="done">Done</option><option value="cancelled">Cancelled</option></select><button>Save</button></form></div>)}{!tasks?.length && <p className="muted">No tasks yet.</p>}</div>
     </Section>}
 
     {tab === "expenses" && <Section title="Expenses">
@@ -93,7 +93,7 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
         <label>Category<select name="category"><option value="labor">Labor</option><option value="seed">Seed</option><option value="fertilizer">Fertilizer</option><option value="pesticide">Pesticide</option><option value="machinery">Machinery</option><option value="irrigation">Irrigation</option><option value="fuel">Fuel</option><option value="transport">Transport</option><option value="other">Other</option></select></label>
         <label>Date<input type="date" name="expense_date" required/></label><label>Amount (PKR)<input type="number" min="0.01" step="0.01" name="amount" required/></label><label className="full-field">Notes / description<textarea name="description" rows={3} placeholder="Vendor, purpose, receipt reference…"/></label><button>Add expense</button>
       </form></details>
-      <List empty="No expenses recorded yet." rows={(expenses || []).map(e => ({ a: e.category, b: e.expense_date, c: "PKR " + Number(e.amount).toLocaleString() + " · " + (e.description || "No notes") }))}/>
+      <List empty="No expenses recorded yet." rows={(expenses || []).map(e => ({ a: e.category, b: e.expense_date, c: "PKR " + Number(e.amount).toLocaleString() + (e.description ? " · " + e.description : "") }))}/>
     </Section>}
 
     {tab === "harvest" && <Section title="Harvest outputs">
@@ -112,7 +112,7 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
         <label>Grade<input name="grade"/></label><label className="full-field">Notes<textarea name="notes" rows={3} placeholder="Picking, quality, storage or other notes…"/></label>
         <button>Add harvest output</button>
       </form></details>}
-      <List empty="No harvest recorded yet." rows={(harvests || []).map(h => ({ a: h.product_name + " · " + h.quantity + " " + h.unit, b: h.harvest_date, c: (h.product_kind === "primary" ? "Primary product" : "By-product") + " · " + (h.grade || "Grade not specified") }))}/>
+      <List empty="No harvest recorded yet." rows={(harvests || []).map(h => ({ a: h.product_name + " · " + h.quantity + " " + h.unit, b: h.harvest_date, c: (h.product_kind === "primary" ? "Primary product" : "By-product") + " · " + (h.grade || "Grade not specified") + (h.notes ? " · " + h.notes : "") }))}/>
     </Section>}
 
     {tab === "sales" && <Section title="Sales">
@@ -129,7 +129,7 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
           <button disabled={!inventory.length}>Record sale</button>
         </form>
       </div>
-      <List empty="No sales recorded yet." rows={(sales || []).map(x => ({ a: x.product_name + " · " + x.quantity + " " + x.unit + " · PKR " + Number(x.total_amount || 0).toLocaleString(), b: x.sale_date, c: (x.product_kind === "primary" ? "Primary product" : "By-product") + " · " + (x.buyers?.name || "Buyer not specified") + " · " + x.payment_status }))}/>
+      <List empty="No sales recorded yet." rows={(sales || []).map(x => ({ a: x.product_name + " · " + x.quantity + " " + x.unit + " · PKR " + Number(x.total_amount || 0).toLocaleString(), b: x.sale_date, c: (x.product_kind === "primary" ? "Primary product" : "By-product") + " · " + (x.buyers?.name || "Buyer not specified") + " · " + x.payment_status + (x.notes ? " · " + x.notes : "") }))}/>
     </Section>}
   </main>;
 }
