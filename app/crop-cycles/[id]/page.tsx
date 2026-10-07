@@ -50,7 +50,7 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
         <article><strong>{c.planted_area} {c.area_unit}</strong><span>Planted area</span></article>
         <article><strong>PKR {expense.toLocaleString()}</strong><span>Total cost</span></article>
         <article><strong>PKR {revenue.toLocaleString()}</strong><span>Revenue</span></article>
-        <article><strong>PKR {(revenue - expense).toLocaleString()}</strong><span>Gross profit / loss</span></article>\n        <article><strong>{inventory.reduce((n,i)=>n+i.remaining,0).toLocaleString()}</strong><span>Stock units available*</span></article>
+        <article><strong>PKR {(revenue - expense).toLocaleString()}</strong><span>Gross profit / loss</span></article>\n        <article><strong>{inventory.length}</strong><span>Products in stock</span></article>
       </section>
       <section className="detail-grid">
         <article className="panel"><h2>Crop details</h2><dl>
@@ -118,19 +118,19 @@ export default async function CyclePage({ params, searchParams }: { params: Prom
 
     {tab === "sales" && <Section title="Sales">
       {error && <p className="notice error">{error}</p>}
-      <div className="inventory-grid">{inventory.map(i => <article key={JSON.stringify([i.productKind,i.productName,i.unit])}><strong>{i.remaining.toLocaleString()} {i.unit}</strong><span>{i.productName}</span><small>{i.productKind === "primary" ? "Primary product" : "By-product"} · {i.harvested.toLocaleString()} harvested · {i.sold.toLocaleString()} sold</small></article>)}{!inventory.length && <p className="muted">Record a harvest output before entering sales.</p>}</div>
+      <div className="inventory-grid">{inventory.map(i => <article key={JSON.stringify([i.productKind,i.productName,i.unit])}><strong>{i.remaining.toLocaleString()} {i.unit}</strong><span>{i.productName}</span><small>Available to sell</small><small>{i.productKind === "primary" ? "Primary product" : "By-product"} · {i.harvested.toLocaleString()} harvested · {i.sold.toLocaleString()} sold</small></article>)}{!inventory.length && <p className="muted">Record a harvest output before entering sales.</p>}</div>
       <div className="sales-tools">
         <details className="record-details buyer-details"><summary>+ Add buyer</summary><form action={addBuyer} className="form"><input type="hidden" name="farm_id" value={c.farm_id}/><input type="hidden" name="crop_cycle_id" value={c.id}/><label>Buyer name<input name="name" required/></label><label>Phone<input name="phone"/></label><button>Add buyer</button></form></details>
         <form action={addSale} className="form sale-form"><input type="hidden" name="farm_id" value={c.farm_id}/><input type="hidden" name="crop_cycle_id" value={c.id}/>
           <label>Buyer<select name="buyer_id"><option value="">Not specified</option>{buyers?.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</select></label>
           <label>Inventory item<select name="stock_item" required>{inventory.map(i => <option key={JSON.stringify([i.productKind,i.productName,i.unit])} value={JSON.stringify([i.productKind,i.productName,i.unit])}>{i.productName} · {i.remaining.toLocaleString()} {i.unit} available</option>)}</select></label>
-          <label>Sale date<input type="date" name="sale_date" required/></label><label>Quantity<input type="number" min="0.001" step="0.001" name="quantity" required/></label>
+          <label>Sale date<input type="date" name="sale_date" required/></label><label>Quantity<input type="number" min="0.001" step="0.001" name="quantity" required/><small className="field-hint">Cannot exceed the available quantity shown above.</small></label>
           <label>Rate / unit (PKR)<input type="number" min="0" step="0.01" name="rate_per_unit" required/></label>
           <label>Payment<select name="payment_status"><option value="unpaid">Unpaid</option><option value="partial">Partial</option><option value="paid">Paid</option></select></label><label className="full-field">Notes<textarea name="notes" rows={3} placeholder="Payment terms, transport, invoice or other notes…"/></label>
           <button disabled={!inventory.length}>Record sale</button>
         </form>
       </div>
-      <List empty="No sales recorded yet." rows={(sales || []).map(x => ({ a: x.product_name + " · " + x.quantity + " " + x.unit + " · PKR " + Number(x.total_amount || 0).toLocaleString(), b: x.sale_date, c: (x.product_kind === "primary" ? "Primary product" : "By-product") + " · " + (x.buyers?.name || "Buyer not specified") + " · " + x.payment_status + (x.notes ? " · " + x.notes : "") }))}/>
+      <List empty="No sales recorded yet." rows={(sales || []).map(x => ({ a: x.product_name + " · " + x.quantity + " " + x.unit, b: x.sale_date, c: "PKR " + Number(x.total_amount || 0).toLocaleString() + " · " + (x.buyers?.name || "Buyer not specified") + " · " + x.payment_status.replace("_"," ") + (x.notes ? " · " + x.notes : "") }))}/>
     </Section>}
   </main>;
 }
