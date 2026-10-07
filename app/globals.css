@@ -55,3 +55,15 @@
  .mobile-menu nav a.active{background:#e7efe5;color:var(--green)}
  .workspace-title-row h1{font-size:26px}
 }
+
+/* Crop cycle workspace */
+.cycle-tabs{position:sticky;top:0;z-index:20;background:rgba(247,248,244,.96);backdrop-filter:blur(8px);padding:10px 0;margin:8px 0 22px}
+.detail-hero{position:relative}.detail-hero .pill{display:inline-flex;margin-top:8px}
+@media(max-width:760px){
+ .cycle-tabs{display:flex;overflow-x:auto;gap:6px;margin-left:-16px;margin-right:-16px;padding:10px 16px;scrollbar-width:none}
+ .cycle-tabs::-webkit-scrollbar{display:none}.cycle-tabs a{flex:0 0 auto;white-space:nowrap}
+ .detail-hero{padding:18px}.detail-hero h1{font-size:30px}
+ .detail-grid{grid-template-columns:1fr}
+ .section-form{grid-template-columns:1fr}
+ .sales-tools{grid-template-columns:1fr}
+}
