@@ -77,3 +77,18 @@
  .page-head-with-action>.page-actions{width:100%}
  .page-head-with-action>.page-actions>button{width:100%;min-height:44px}
 }
+
+/* Crop-cycle detail: denser mobile workspace and discoverable tabs. */
+@media(max-width:760px){
+ .back-link{display:inline-flex;margin:18px 0 14px}
+ .detail-hero{margin-bottom:12px}
+ .detail-hero .eyebrow{font-size:11px}
+ .detail-hero h1{margin:8px 0 6px}
+ .detail-hero p{margin:0 0 12px}
+ .cycle-tabs{margin-top:0;margin-bottom:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+ .cycle-tabs:after{content:"›";position:sticky;right:0;align-self:center;padding:0 2px 0 10px;background:linear-gradient(90deg,transparent,var(--card) 45%);font-size:24px;color:var(--green)}
+ .stats.finance-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin:16px 0}
+ .stats.finance-stats article{padding:16px;min-height:108px}
+ .stats.finance-stats strong{font-size:23px;line-height:1.1;overflow-wrap:anywhere}
+ .stats.finance-stats span{font-size:13px}
+}
