@@ -44,6 +44,10 @@ export async function createCycle(f: FormData) {
   if (!(planted > 0)) throw new Error("Planted area must be greater than zero.");
   if (field.area_unit === unit && planted > field.area) throw new Error("Planted area cannot exceed the field area.");
 
+  const { data: existing, error: occupiedError } = await supabase.from("crop_cycles").select("id").eq("field_id", fieldId).not("status", "in", "(closed,cancelled)").limit(1);
+  if (occupiedError) throw new Error(occupiedError.message);
+  if (existing?.length) throw new Error("This field already has an open crop cycle. Close or cancel it before starting another.");
+
   const cropId = String(f.get("crop_id"));
   const requestedVariety = String(f.get("variety_id") || "");
   let variety: string | null = null;
