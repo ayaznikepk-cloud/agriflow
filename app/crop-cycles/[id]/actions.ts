@@ -11,10 +11,17 @@ async function auth() {
   return supabase;
 }
 
+async function verifiedCycle(s: Awaited<ReturnType<typeof auth>>, id: string) {
+  const { data, error } = await s.from("crop_cycles").select("id,farm_id,status").eq("id", id).single();
+  if (error || !data) throw new Error("Crop cycle not found or inaccessible.");
+  return data;
+}
+
 export async function addActivity(f: FormData) {
   const s = await auth();
   const id = String(f.get("crop_cycle_id"));
-  const farm = String(f.get("farm_id"));
+  const verified = await verifiedCycle(s, id);
+  const farm = verified.farm_id;
   const q = String(f.get("quantity") || "");
   const { error } = await s.from("activities").insert({
     farm_id: farm,
@@ -33,8 +40,9 @@ export async function addActivity(f: FormData) {
 export async function addTask(f: FormData) {
   const s = await auth();
   const id = String(f.get("crop_cycle_id"));
+  const verified = await verifiedCycle(s, id);
   const { error } = await s.from("tasks").insert({
-    farm_id: String(f.get("farm_id")),
+    farm_id: verified.farm_id,
     crop_cycle_id: id,
     title: String(f.get("title")),
     due_date: String(f.get("due_date") || "") || null,
@@ -52,7 +60,8 @@ export async function updateTask(f: FormData) {
   const id = String(f.get("crop_cycle_id"));
   const status = String(f.get("status"));
   if (!["open", "in_progress", "done", "cancelled"].includes(status)) throw new Error("Invalid task status.");
-  const { error } = await s.from("tasks").update({ status }).eq("id", String(f.get("task_id")));
+  await verifiedCycle(s, id);
+  const { error } = await s.from("tasks").update({ status }).eq("id", String(f.get("task_id"))).eq("crop_cycle_id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/crop-cycles/" + id);
   revalidatePath("/tasks");
@@ -61,10 +70,11 @@ export async function updateTask(f: FormData) {
 export async function addExpense(f: FormData) {
   const s = await auth();
   const id = String(f.get("crop_cycle_id"));
+  const verified = await verifiedCycle(s, id);
   const amount = Number(f.get("amount"));
   if (!(amount > 0)) throw new Error("Expense amount must be greater than zero.");
   const { error } = await s.from("expenses").insert({
-    farm_id: String(f.get("farm_id")),
+    farm_id: verified.farm_id,
     crop_cycle_id: id,
     expense_date: String(f.get("expense_date")),
     category: String(f.get("category")),
@@ -79,6 +89,7 @@ export async function addExpense(f: FormData) {
 export async function addHarvest(f: FormData) {
   const s = await auth();
   const id = String(f.get("crop_cycle_id"));
+  const verified = await verifiedCycle(s, id);
   const quantity = Number(f.get("quantity"));
   const productKind = String(f.get("product_kind") || "primary");
   const productName = String(f.get("product_name") || "").trim();
@@ -93,7 +104,7 @@ export async function addHarvest(f: FormData) {
   }
 
   const { error } = await s.from("harvests").insert({
-    farm_id: String(f.get("farm_id")),
+    farm_id: verified.farm_id,
     crop_cycle_id: id,
     harvest_date: String(f.get("harvest_date")),
     quantity,
@@ -142,8 +153,9 @@ export async function reopenHarvesting(f: FormData) {
 export async function addBuyer(f: FormData) {
   const s = await auth();
   const id = String(f.get("crop_cycle_id"));
+  const verified = await verifiedCycle(s, id);
   const { error } = await s.from("buyers").insert({
-    farm_id: String(f.get("farm_id")),
+    farm_id: verified.farm_id,
     name: String(f.get("name")),
     phone: String(f.get("phone") || "") || null,
   });
@@ -154,7 +166,8 @@ export async function addBuyer(f: FormData) {
 export async function addSale(f: FormData) {
   const s = await auth();
   const id = String(f.get("crop_cycle_id"));
-  const farm = String(f.get("farm_id"));
+  const verified = await verifiedCycle(s, id);
+  const farm = verified.farm_id;
   const quantity = Number(f.get("quantity"));
   const rate = Number(f.get("rate_per_unit"));
 
